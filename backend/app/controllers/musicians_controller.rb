@@ -10,6 +10,14 @@ class MusiciansController < ApplicationController
     end
 
     def create
+        musician = Musician.new(musician_params)
+
+        if musician.save
+            render json: { status: 'SUCCESS' }
+        else
+            puts musician.errors.details
+            render json: { status: 'ERROR' }
+        end
     end
 
     def edit
@@ -18,6 +26,12 @@ class MusiciansController < ApplicationController
     def update
     end
 
-    def delete
+    def destroy
+    end
+
+    private
+
+    def musician_params
+        params.require(:musician).permit(:name, :instrument)
     end
 end
