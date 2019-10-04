@@ -79,11 +79,15 @@ function renderMusician(musician) {
     li.innerText = `${musician.name}`;
     // `instrument: ${musician.instrument}`
     const button1 = document.createElement("button");
-    button1.setAttribute("class", "btn");
+    button1.setAttribute("class", "view-btn");
     button1.innerText = "See Auditions";
-    button1.addEventListener("click", () => getAuditions(musician));
+    button1.addEventListener("click", () => {getAuditions(musician);
+        // ADDED BELOW @10/4; 9:20AM
+        document.querySelector("form").remove();
+    });
 
     const button2 = document.createElement("button");
+    button2.setAttribute("class", "delete-btn");
     button2.innerText = "Delete";
     button2.addEventListener("click", () => deleteMusician(musician, li));
     li.appendChild(button1);
@@ -131,18 +135,20 @@ function renderAuditions(auditionData) {
         let aCard = document.createElement("div");
         aCard.setAttribute("class", "card");
         aCard.id = `aCard${auditionData.id}`;
-        aCard.innerHTML = `Orchestra: ${auditionData.orchestra}, Position: ${auditionData.position}, Date: ${auditionData.date}, Excerpts: ${auditionData.excerpts}`;
+        aCard.innerHTML = `Orchestra: ${auditionData.orchestra} <br>
+        Position: ${auditionData.position} <br> Date: ${auditionData.date} <br> Excerpts: <a href = "${auditionData.excerpts}">Link</a>`;
 
         const editButton = document.createElement("button");
         editButton.setAttribute("class", "edit-btn");
         editButton.textContent = "Edit";
         editButton.addEventListener("click", () => {editAud(auditionData);
-            document.getElementById("create-form").remove();
-            // submitFunc();
+            // document.getElementById("create-form").remove();
+            // document.querySelector(".add-audition-form").remove();
         });
         aCard.appendChild(editButton);
 
         const deleteButton = document.createElement("button");
+        deleteButton.setAttribute("class", "delete-audition-btn")
         deleteButton.innerText = "Delete";
         deleteButton.addEventListener("click", () => deleteAudition(auditionData, aCard));
         aCard.appendChild(deleteButton);
@@ -174,7 +180,7 @@ function createAudition(e) {
         document.getElementById("audition-list").innerHTML = "";
     })
     .catch(err => console.log(err))
-}
+};
 function editAud(auditionData) {
     // console.log(auditionData.id);
     document.getElementById("create-form");
@@ -185,6 +191,7 @@ function editAud(auditionData) {
     hiddenInput.setAttribute("name", "hidden");
     hiddenInput.id = `${auditionData.id}`
     createForm.setAttribute("class", "add-audition-form");
+    createForm.id = "edit-form";
     let nameInput = document.createElement("input");
     nameInput.setAttribute("type", "text");
     nameInput.setAttribute("name", "musician");
@@ -236,7 +243,13 @@ function editAud(auditionData) {
     createForm.appendChild(exInput);
     createForm.appendChild(submitInput);
     createForm.appendChild(hiddenInput);
-    createForm.addEventListener("submit", (e) => updateAud(e));
+    createForm.addEventListener("submit", (e) => {
+        updateAud(e);
+        // document.getElementById("create-audition").remove();
+        // document.getElementById("create-form").remove();
+        // document.getElementById("edit-form").remove();
+        // document.getElementsByClassName("add-audition-form").remove();
+    });
     formDiv.appendChild(createForm);
 }
 function updateAud(e) {
@@ -261,9 +274,10 @@ function updateAud(e) {
         }, 
         body: JSON.stringify(audData)
     })
-    // .then(console.log)
-    .then(() => {
-        
+    .then(response => response.json())
+    .then(json => {
+        document.getElementById("audition-list").innerHTML = "";
+        renderAuditions(json);
     })
     .catch(err => console.log(err))
     // .then(response => response.json())

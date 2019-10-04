@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   resources :auditions
   resources :musicians
+  # below is all redundant except for #single_show custom route~
   get '/auditions/:id' => 'auditions#show'
   get '/auditions/musician/:musician_id' => 'auditions#single_show'
   patch '/auditions/musician/:musician_id' => 'auditions#update'
