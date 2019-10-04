@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   resources :auditions
   resources :musicians
-  # get '/auditions' => 'auditions#index'
   get '/auditions/:id' => 'auditions#show'
   get '/auditions/musician/:musician_id' => 'auditions#single_show'
   patch '/auditions/musician/:musician_id' => 'auditions#update'

@@ -10,8 +10,7 @@ class MusiciansController < ApplicationController
     end
 
     def create
-        # byebug
-        musician = Musician.create(musician_params)
+        musician = Musician.find_or_create_by(name: params[:audition][:musician_name])
 
         if musician.save
             render json: { status: 'SUCCESS' }
@@ -22,6 +21,7 @@ class MusiciansController < ApplicationController
     end
 
     def edit
+        musician = Musician.find(params[:id])
     end
 
     def update

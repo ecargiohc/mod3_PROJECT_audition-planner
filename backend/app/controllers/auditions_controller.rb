@@ -14,12 +14,13 @@ class AuditionsController < ApplicationController
 
     def create
         # byebug
-        musician = Musician.find_or_create_by(name: params[:audition][:musician_name], instrument: params[:audition][:instrument])
+        musician = Musician.find_or_create_by(name: params[:audition][:musician_name])
         audition = Audition.create(audition_params)
         audition.musician = musician
         
         if audition.save
-            render json: { status: 'SUCCESS' }
+            render json: musician
+            # render json: { status: 'SUCCESS' }
         else
             # byebug
             puts audition.errors.details
@@ -35,7 +36,7 @@ class AuditionsController < ApplicationController
         audition = Audition.find(params[:id])
         audition.update(audition_params)
         if audition.update(audition_params)
-            render json: { status: 'SUCCESS'}
+            # render json: { status: 'SUCCESS'}
             render json: audition
         else
             render json: { status: 'FAILED'}
@@ -45,10 +46,6 @@ class AuditionsController < ApplicationController
     def destroy
         # musician = Audition.where("musician_id": params[:musician_id])
         audition = Audition.find(params[:id])
-        # byebug
-        # audition = Audition.where("musician_id = ? AND id = ?", params[:musician_id], params[:id])
-        # # byebug
-        # puts audition
         audition.destroy
     end
 
