@@ -10,7 +10,8 @@ class MusiciansController < ApplicationController
     end
 
     def create
-        musician = Musician.new(musician_params)
+        # byebug
+        musician = Musician.create(musician_params)
 
         if musician.save
             render json: { status: 'SUCCESS' }
@@ -24,9 +25,14 @@ class MusiciansController < ApplicationController
     end
 
     def update
+        musician = Musician.find(params[:id])
+        # musician.update(musician_params)
+        render json: musician
     end
 
     def destroy
+        musician = Musician.find(params[:id])
+        musician.destroy
     end
 
     private

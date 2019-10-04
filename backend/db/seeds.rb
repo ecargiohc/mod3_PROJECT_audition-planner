@@ -77,3 +77,5 @@ a9 = Audition.create({orchestra: "Oslo Philharmonic", position: "Co-principal Ce
 #     'Yvonne',
 #     'Zoey'
 # ]
+
+puts "seeds done."
